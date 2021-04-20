@@ -2,51 +2,44 @@
   This page represents the /collections and /products pages.
 {% endcomment %}
 
-{% case section.settings.grid %}
-  {% when 2 %}
-    {%- assign grid_item_width = 'medium-up--one-half' -%}
-  {% when 3 %}
-    {%- assign grid_item_width = 'small--one-half medium-up--one-third' -%}
-  {% when 4 %}
-    {%- assign grid_item_width = 'small--one-half medium-up--one-quarter' -%}
-  {% when 5 %}
-    {%- assign grid_item_width = 'small--one-half medium-up--one-fifth' -%}
-  {% else %}
-    {%- assign grid_item_width = 'small--one-half medium-up--one-third' -%}
-{% endcase %}
 
-<h1>{{ page_title }}</h1>
-
- <div class="grid grid--uniform">
-  {% if section.settings.display_type == 'all' %}
-    {% case section.settings.sort %}
-      {% when 'products_high' or 'products_low' %}
-        {%- assign collections = collections | sort: 'all_products_count' -%}
-      {% when 'date' or 'date_reversed' %}
-        {%- assign collections = collections | sort: 'published_at' -%}
-    {% endcase %}
-    {% if section.settings.sort == 'products_low' or section.settings.sort == 'date' or section.settings.sort == 'alphabetical' %}
-      {% for collection in collections %}
-        <div class="grid__item {{ grid_item_width }}">
-          {% include 'collection-grid-item' %}
-        </div>
-      {% endfor %}
-    {% else %}
-      {% for collection in collections reversed %}
-        <div class="grid__item {{ grid_item_width }}">
-          {% include 'collection-grid-item' %}
-        </div>
-      {% endfor %}
-    {% endif %}
-  {% else %}
-    {% for block in section.blocks %}
-      <div class="grid__item {{ grid_item_width }}">
-        {%- assign collection = collections[block.settings.collection] -%}
-        {% include 'collection-grid-item' %}
+<div class="container-fluid px-sm-2 pt-lg-4 pt-6 pb-3">
+    <div class="row pb-3 mx-0">
+      <div class="col-12 text-center mb-3">
+        <h4>Products</h4>
       </div>
-    {% endfor %}
-  {% endif %}
+
+      {% if section.settings.display_type == 'all' %}
+        {% case section.settings.sort %}
+          {% when 'products_high' or 'products_low' %}
+            {%- assign collections = collections | sort: 'all_products_count' -%}
+          {% when 'date' or 'date_reversed' %}
+            {%- assign collections = collections | sort: 'published_at' -%}
+        {% endcase %}
+        {% if section.settings.sort == 'products_low' or section.settings.sort == 'date' or section.settings.sort == 'alphabetical' %}
+          {% for collection in collections %}
+            <div class="product col-lg-3 col-md-4 col-6 p-1 slide-up-animation animated">
+              {% include 'collection-grid-item' %}
+            </div>
+          {% endfor %}
+        {% else %}
+          {% for collection in collections reversed %}
+            <div class="product col-lg-3 col-md-4 col-6 p-1 slide-up-animation animated">
+              {% include 'collection-grid-item' %}
+            </div>
+          {% endfor %}
+        {% endif %}
+      {% else %}
+        {% for block in section.blocks %}
+          <div class="product col-lg-3 col-md-4 col-6 p-1 slide-up-animation animated">
+            {%- assign collection = collections[block.settings.collection] -%}
+            {% include 'collection-grid-item' %}
+          </div>
+        {% endfor %}
+      {% endif %}
+    </div>
 </div>
+
 
 
 
@@ -392,37 +385,6 @@
           }
         }
       ]
-    },
-    {
-      "type": "range",
-      "id": "grid",
-      "label": {
-        "cs": "Počet kolekcí na řádek",
-        "da": "Kollektioner pr. række",
-        "de": "Kategorien per Reihe",
-        "en": "Collections per row",
-        "es": "Colecciones por fila",
-        "fi": "Kokoelmia per rivi",
-        "fr": "Collections par rangée",
-        "it": "Collezioni per riga",
-        "ja": "行あたりのコレクション数",
-        "ko": "열 별 컬렉션",
-        "nb": "Samlinger per rad",
-        "nl": "Collecties per rij",
-        "pl": "Liczba kolekcji na wiersz",
-        "pt-BR": "Coleções por linha",
-        "pt-PT": "Coleções por linha",
-        "sv": "Produktserier per rad",
-        "th": "คอลเลกชันต่อแถว",
-        "tr": "Satır başına koleksiyon",
-        "vi": "Số bộ sưu tập trên mỗi hàng",
-        "zh-CN": "每行产品系列数",
-        "zh-TW": "每列商品系列數"
-      },
-      "min": 2,
-      "max": 5,
-      "step": 1,
-      "default": 3
     }
   ],
   "blocks": [

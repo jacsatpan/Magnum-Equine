@@ -1,9 +1,10 @@
-<div class="wrapper">
-  {% if section.settings.heading != blank %}
-    <h2 class="small--text-center">{{ section.settings.heading | escape }}</h2>
-  {% endif %}
-  <div class="grid">
-    <div class="grid__item one-whole">
+<div class="container-fluid pt-1">
+  <div class="row mx-0">
+    <div class="col-12 text-center px-0">
+      {% if section.settings.heading != blank %}
+        <h2>{{ section.settings.heading | escape }}</h2>
+      {% endif %}
+
       <div class="video-wrapper">
       {% if section.settings.video_url == blank %}
         <iframe src="//www.youtube.com/embed/_9VUPq3SxOc?rel=0&showinfo=0&vq=720" width="850" height="480" frameborder="0" allowfullscreen></iframe>

@@ -1,0 +1,55 @@
+{% assign details = product.metafields.details %}
+{% assign specifications = product.metafields.specifications %}
+{% assign faq = product.metafields.faq %}
+{% assign custom_attributes = product.metafields.custom_attributes %}
+
+
+
+
+{% if details.size > 0 or specifications.size > 0 or faq.size > 0 or custom_attributes.size > 0  %} 
+    <div class="row">
+        <div class="col-12 pt-3 px-xl-4">
+            <div id="accordion" class="accordion-container">
+                {% for field in details %}
+                    {% assign details_code = field | first %}
+                    {% assign details_value = field | last %}
+                    
+                    <h5 class="accordion-title js-accordion-title">{{ details_code }}</h5>
+                    <div class="accordion-content">
+                        {{ details_value }}
+                    </div>
+                {% endfor %}
+
+                {% for field in specifications %}
+                    {% assign specs_code = field | first %}
+                    {% assign specs_value = field | last %}
+                    
+                    <h5 class="accordion-title js-accordion-title">{{ specs_code }}</h5>
+                    <div class="accordion-content split-columns">
+                        {{ specs_value }}
+                    </div>
+                {% endfor %}
+
+                {% for field in faq %}
+                    {% assign faq_code = field | first %}
+                    {% assign faq_value = field | last %}
+                    
+                    <h5 class="accordion-title js-accordion-title">{{ faq_code }}</h5>
+                    <div class="accordion-content">
+                        {{ faq_value }}
+                    </div>
+                {% endfor %}
+
+                {% for field in custom_attributes %}
+                    {% assign attribute_code = field | first %}
+                    {% assign attribute_value = field | last %}
+
+                    <h5 class="accordion-title js-accordion-title">{{ attribute_code }}</h5>
+                    <div class="accordion-content {% if attribute_code == 'Specifications' %}split-columns{% endif %}">
+                        {{ attribute_value }}
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+{% endif %}

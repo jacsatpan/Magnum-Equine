@@ -25,16 +25,6 @@
     document.documentElement.className = document.documentElement.className.replace('supports-no-js', 'supports-js');
 
     var theme = {
-      strings: {
-        addToCart: {{ 'products.product.add_to_cart' | t | json }},
-        itemAddedToCart: {{ 'products.product.item_added_to_cart' | t | json }},
-        soldOut: {{ 'products.product.sold_out' | t | json }},
-        unavailable: {{ 'products.product.unavailable' | t | json }},
-        viewCart: {{ 'products.product.view_cart' | t | json }},
-        zoomClose: {{ 'products.zoom.close' | t | json }},
-        zoomPrev: {{ 'products.zoom.prev' | t | json }},
-        zoomNext: {{ 'products.zoom.next' | t | json }}
-      },
       mapStrings: {
         addressError: {{ 'homepage.map.address_error' | t | json }},
         addressNoResults: {{ 'homepage.map.address_no_results' | t | json }},
@@ -44,8 +34,11 @@
     }
   </script>
 
-  {{ 'theme.scss.css' | asset_url | stylesheet_tag }}
+  {% comment %} add minified bootstrap  {% endcomment %}
+  {{ 'bootstrap-min.css' | asset_url | stylesheet_tag }}
 
+  {{ 'theme.scss.css' | asset_url | stylesheet_tag }}
+  
   {{ content_for_header }}
 
   {{ 'jquery-1.11.0.min.js' | asset_url | script_tag }}
@@ -56,7 +49,11 @@
   {% if request.page_type contains 'customers/' %}
     {{ 'shopify_common.js' | shopify_asset_url | script_tag }}
   {% endif %}
+
+
+  <link rel="stylesheet" href="https://use.typekit.net/kvt7qho.css">
 </head>
+
 
 <body id="{{ page_title | handle }}" class="{% if customer %}customer-logged-in {% endif %}template-{{ request.page_type | handle }}">
 
@@ -68,35 +65,31 @@
     <hr class="small--hide hr--small">
     {% endcomment %}
 
-  <div class="site-wrapper">
 
-    <div class="grid">
 
-      {% section "sidebar" %}
+    {% section "sidebar" %}
 
-      <main class="main-content grid__item medium-up--four-fifths" id="MainContent" role="main">
-        {% unless request.page_type == 'index' %}
-          <hr class="hr--border-top small--hide">
-        {% endunless %}
-        {% if settings.show_breadcrumb_nav and request.page_type != 'index' %}
-          {% include 'breadcrumb-nav' %}
-        {% endif %}
+    <main class="main-content" id="MainContent" role="main">
+      {% if settings.show_breadcrumb_nav and request.page_type != 'index' %}
+        {% include 'breadcrumb-nav' %}
+      {% endif %}
+
+      <div class="container-fluid px-0">
         {{ content_for_layout }}
-      </main>
+      </div>
 
-    </div>
+      {% section "footer" %}
+      
 
-    <hr>
+      
+    </main>
 
-    {% section "footer" %}
 
-    {%- if request.page_type == 'index' -%}
-      <p id="slideshow-info" class="visually-hidden" aria-hidden="true">
-        {{- 'homepage.slideshow.navigation_instructions' | t -}}
-      </p>
-    {%- endif -%}
-
-  </div>
+  {%- if request.page_type == 'index' -%}
+    <p id="slideshow-info" class="visually-hidden" aria-hidden="true">
+      {{- 'homepage.slideshow.navigation_instructions' | t -}}
+    </p>
+  {%- endif -%}
 
   {% if request.page_type == 'product' or request.page_type == 'index' %}
     {{ 'option_selection.js' | shopify_asset_url | script_tag }}
@@ -112,7 +105,10 @@
     <li id="a11y-refresh-page-message">{{ 'general.accessibility.refresh_page' | t }}</li>
     <li id="a11y-selection-message">{{ 'general.accessibility.selection_help' | t }}</li>
   </ul>
-
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/micromodal/0.4.6/micromodal.min.js" integrity="sha512-RMMh+IHzfZLsVFo1rX9PBoysxrJJqjyOS31HYWftobWtv2At6KBTqKpvVDIWAjL5aiV+LjFqkQ6e53Rdw3VOBg==" crossorigin="anonymous"></script>
   {{ 'theme.js' | asset_url | script_tag }}
+
+   
 </body>
 </html>

@@ -6,35 +6,20 @@
   {% assign collection_image = blank %}
 {% endif %}
 
-<div class="collection-grid-item">
-  <a href="{% if collection.products == empty %}#{% else %}{{ collection.url }}{% endif %}" class="collection-grid-item__link">
-    {% unless collection_image == blank %}
-      <div class="collection-grid-item__overlay lazyload"
-        data-bgset="{% include 'bgset', image: collection_image %}"
-        data-sizes="auto"
-        data-parent-fit="cover">
-      </div>
-      <noscript>
-        <div class="collection-grid-item__overlay" style="background-image: url('{{ collection_image | img_url: '1024x1024' }}')"></div>
-      </noscript>
-    {% else %}
-      {% if collection == empty %}
-        <div class="collection-grid-item__overlay">
-          {% capture current %}{% cycle 1, 2, 3 %}{% endcapture %}
-          {{ 'collection-' | append: current | placeholder_svg_tag: 'placeholder-svg' }}
-        </div>
-      {% else %}
-         <div class="collection-grid-item__overlay" style="background-image: url('{{ collection_image | img_url: '1024x1024' }}')"></div>
-      {% endif %}
-    {% endunless %}
-    <div class="collection-grid-item__title-wrapper">
-      <h3 class="h2 collection-grid-item__title">
-        {% if collection.title == blank %}
-          {{ 'homepage.onboarding.collection_title' | t }}
-        {% else %}
-          {{ collection.title }}
-        {% endif %}
-      </h3>
-    </div>
+
+{% unless collection_image  == blank %}
+    <a href="{% if collection.title == 'Sheds and Barns' %}https://magnumbuild.co.nz/{% elsif collection.products == empty %}#{% else %}{{ collection.url }}{% endif %}" 
+    class="product-block" 
+    {% if collection.title == 'Sheds and Barns' %}target="_blank"{% endif %}
+    style="background-image: url({{ collection_image | img_url: '2000x' }}); background-position: center; background-size: cover;" 
+    title="{{ product.title | escape }}" data-image-link></a>
+{% else %}
+  <a href="{% if collection.title == 'Sheds and Barns' %}https://magnumbuild.co.nz/{% elsif collection.products == empty %}#{% else %}{{ collection.url }}{% endif %}" class=" supports-js product__image-wrapper" {% if collection.title == 'Sheds and Barns' %}target="_blank"{% endif %}>
+    <img src="{{ collection_image | img_url: '1024x1024' }}" alt="{{ collection_image.alt | escape }}">
   </a>
+{% endunless %}
+
+<div class="product__title">
+  <hr>
+  <a href="{{ product.url | within: collection }}">{{ collection.title }}</a>
 </div>

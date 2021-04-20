@@ -1,0 +1,83 @@
+<div class="row">
+    {%- for block in section.blocks -%}
+        <div class="product col-lg-3 col-md-4 col-6 p-1 slide-up-animation animated" role="listitem">
+
+            <a href="{{ block.settings.gallery_link }}" 
+            class="product-block" 
+            style="background-image: url({{ block.settings.image | img_url: '2000x' }}); background-position: center; background-size: cover;" 
+            title="{{ block.settings.gallery_heading | escape }}" data-image-link></a>
+            
+            <div class="product__title">
+                <hr>
+                <a href="{{ block.settings.gallery_link }}">{{ block.settings.gallery_heading | escape }}</a>
+            </div>
+        </div>
+    {% endfor %}
+</div>
+
+
+{% schema %}
+{
+  "name": {
+    "en": "Gallery List"
+  },
+  "class": "shopify-gallery-list",
+  "max_blocks": 12,
+  "blocks": [
+    {
+      "type": "image",
+      "name": {
+        "en": "Gallery Block"
+      },
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": {
+            "en": "Image"
+          }
+        },
+        {
+          "type": "header",
+          "content": {
+            "en": "Text"
+          }
+        },
+        {
+          "type": "text",
+          "id": "gallery_heading",
+          "default": "Gallery 1",
+          "label": {            
+            "en": "Heading"            
+          }
+        },
+        {
+          "type": "url",
+          "id": "gallery_link",
+          "label": {            
+            "en": "Gallery page link"           
+          }
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": {        
+        "en": "Gallery"       
+      },
+      "category": {        
+        "en": "Image"
+      },
+      "blocks": [
+        {
+          "type": "image"
+        },
+        {
+          "type": "image"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

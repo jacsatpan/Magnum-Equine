@@ -4,3 +4,14 @@
 
 {% section 'product-template' %}
 {% section 'product-recommendations' %}
+
+<script>
+  $(function () {
+    $(".accordion-content").css("display", "none");
+  
+    $(".js-accordion-title").click(function () {
+      $(".open").not(this).removeClass("open").next().slideUp(500);
+      $(this).toggleClass("open").next().slideToggle(500);
+    });
+  });
+</script>

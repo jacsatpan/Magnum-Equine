@@ -1,0 +1,40 @@
+{%- if section.settings.heading != blank -%}
+    <div class="col-12 my-3">
+        <h4 class="mb-0">{{ section.settings.heading }}</h4>
+    </div>
+{%- endif -%}
+
+
+{%- for block in section.blocks -%}
+    <div class="product col-lg-3 col-md-4 col-6 p-1 slide-up-animation animated" role="listitem" >
+        <div class="product-block lightbox" data-micromodal-trigger="{{ block.id }}"
+        style="background-image: url({{ block.settings.image | img_url: '2000x' }}); background-position: center; background-size: cover;" 
+        data-image-link>
+        </div>
+
+        <p class="mb-0 small" style="margin-top: 8px;">{{ block.settings.caption }}</p>
+    </div>
+{% endfor %}
+
+
+{%- for block in section.blocks -%}
+    <div class="modal micromodal-slide" id="{{ block.id }}" aria-hidden="true">
+        <div class="modal__overlay" tabindex="-1" data-micromodal-close>
+            <div class="modal__container" role="dialog" aria-modal="true" aria-labelledby="{{ block.id }}-title">
+                <header class="modal__header">
+                    <button class="modal__close" aria-label="Close modal" data-micromodal-close></button>
+                </header>
+                <main class="modal__content" id="{{ block.id }}-content">
+                    <img src="{{ block.settings.image | img_url: '2000x' }}" alt="" class="modal-img">
+                </main>
+                <footer class="modal__footer">
+                    {%- if block.settings.caption != blank -%}
+                        <footer>
+                            <p class="mb-0 small">{{ block.settings.caption }}</p>                        
+                        </footer>
+                    {%- endif -%}
+                </footer>
+            </div>
+        </div>
+    </div>
+{% endfor %}

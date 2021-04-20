@@ -1,0 +1,32 @@
+{% unless current_collection == blank %}
+  {% assign current_collection = collection %}
+{% endunless %}
+
+{% assign productTags = product.tags | join: ', ' %}
+
+
+<div class="product {{ grid_item_width }} p-1 slide-up-animation animated" role="listitem">
+  {% unless product.featured_image == blank %}
+      <a href="{{ product.url | within: collection }}" 
+      class="product-block" 
+      style="background-image: url({{ product.featured_image | img_url: '2000x' }}); background-position: center; background-size: cover;" 
+      title="{{ product.title | escape }}" data-image-link></a>
+  {% else %}
+    <a href="{{ product.url | within: collection }}" class=" supports-js product__image-wrapper" title="{{ product.title | escape }}">
+      <img src="{{ product.featured_image.src | img_url: 'grande' }}" alt="{{ product.featured_image.alt | escape }}">
+    </a>
+  {% endunless %}
+ 
+  <div class="product__title">
+    <hr>
+    {% assign current_variant = product.selected_or_first_available_variant %}
+
+    <a href="{{ product.url | within: collection }}">{{ product.title }}</a>
+    <p class="mb-0 text-grey text-light-weight">
+      <small>
+        {{ current_variant.sku }}<br>
+        {% if productTags contains 'Enquire Only' %}{% else %}<span style="color:#000 !important;">{{ product.price | money }}</span>{% endif %}
+      </small>
+    </p>
+  </div>
+</div>

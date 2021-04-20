@@ -1,0 +1,28 @@
+
+{% capture img_id %}ProductImage-{{ image.id }}{% endcapture %}
+{% capture wrapper_id %}ProductImageWrapper-{{ image.id }}{% endcapture %}
+{%- assign img_url = image | img_url: '1x1' | replace: '_1x1.', '_{width}x.' -%}
+
+
+<div class="flexslider">
+    <ul class="slides no-list">
+        {% for image in product.images %}
+            <li>
+                <img src="{{ image | img_url: '2000x' }}" alt="{{ image.alt | escape }}">
+                {% if image.alt != product.title %}
+                    <p class="flex-caption">{{ image.alt | escape }}</p>
+                {% endif %}
+            </li>
+        {% endfor %}
+    </ul>
+</div>
+
+<script>
+// Can also be used with $(document).ready()
+$(window).load(function() {
+  $('.flexslider').flexslider({
+    animation: "slide",
+    directionNav:false
+  });
+});
+</script>

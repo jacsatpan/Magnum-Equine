@@ -1,0 +1,64 @@
+<div class="row" id="gallery-{{ section.id }}">
+    {% include 'gallery-blocks' %}
+</div>
+
+
+
+
+{% schema %}
+{
+  "name": {
+    "en": "Hotcote Fencing Gallery"
+  },
+  "class": "shopify-gallery-hotcote",
+  "max_blocks": 100,
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": {            
+        "en": "Gallery Heading"            
+      }
+    }
+  ],
+  "blocks": [
+    {
+      "type": "image",
+      "name": {
+        "en": "Gallery Image"
+      },
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": {
+            "en": "Image"
+          }
+        },
+        {
+          "type": "text",
+          "id": "caption",
+          "label": {            
+            "en": "Image caption"            
+          }
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": {        
+        "en": "Gallery"       
+      },
+      "category": {        
+        "en": "Hotcote Fencing Gallery"
+      },
+      "blocks": [
+        {
+          "type": "image"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

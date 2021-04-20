@@ -1,34 +1,125 @@
 <!-- /templates/page.contact.liquid -->
-<h1 class="small--text-center">{{ page.title }}</h1>
 
-<div class="rte">
-  {{ page.content }}
-</div>
+<div class="container px-md-2 pt-lg-5 pt-6 pb-3">
+    <div class="row mx-0">
+      <div class="col-12 pb-3">
+        <h2>Get in touch</h2>
+      </div>
+    </div>
 
-<div class="contact-form form-vertical">
-  {% form 'contact' %}
 
-    {% if form.posted_successfully? %}
-      <p class="form--success">
-        {{ 'contact.form.post_success' | t }}
-      </p>
-    {% endif %}
+    <div class="row pb-3 mx-0">
+      {% comment %} contact form {% endcomment %}
 
-    {{ form.errors | default_errors }}
 
-    <label for="ContactFormName" class="label--hidden">{{ 'contact.form.name' | t }}</label>
-    <input type="text" id="ContactFormName" name="contact[{{ 'contact.form.name' | t }}]" placeholder="{{ 'contact.form.name' | t }}" autocapitalize="words" value="{% if form[name] %}{{ form[name] }}{% elsif customer %}{{ customer.name }}{% endif %}">
+      <div class="col-md-8 contact-form form-vertical mb-md-0 mb-3">
+        {% form 'contact' %}
+          {% if form.posted_successfully? %}
+            <p class="form--success">
+              {{ 'contact.form.post_success' | t }}
+            </p>
+          {% endif %}
 
-    <label for="ContactFormEmail" class="label--hidden">{{ 'contact.form.email' | t }}</label>
-    <input type="email" id="ContactFormEmail" name="contact[email]" placeholder="{{ 'contact.form.email' | t }}" autocorrect="off" autocapitalize="off" value="{% if form.email %}{{ form.email }}{% elsif customer %}{{ customer.email }}{% endif %}">
+          {{ form.errors | default_errors }}
 
-    <label for="ContactFormPhone" class="label--hidden">{{ 'contact.form.phone' | t }}</label>
-    <input type="tel" id="ContactFormPhone" name="contact[{{ 'contact.form.phone' | t }}]" placeholder="{{ 'contact.form.phone' | t }}" pattern="[0-9\-]*" value="{% if form[phone] %}{{ form[phone] }}{% elsif customer %}{{ customer.phone }}{% endif %}">
+          <div class="row">
+            <div class="col-12">
+               <label for="ContactFormName">{{ 'contact.form.name' | t }} *</label>
+              <input type="text" id="ContactFormName" name="contact[{{ 'contact.form.name' | t }}]" autocapitalize="words" value="{% if form[name] %}{{ form[name] }}{% elsif customer %}{{ customer.name }}{% endif %}" required>
+            </div>
 
-    <label for="ContactFormMessage" class="label--hidden">{{ 'contact.form.message' | t }}</label>
-    <textarea rows="10" id="ContactFormMessage" name="contact[{{ 'contact.form.message' | t }}]" placeholder="{{ 'contact.form.message' | t }}">{% if form.body %}{{ form.body }}{% endif %}</textarea>
+            <div class="col-md-6">
+              <label for="ContactFormEmail">{{ 'contact.form.email' | t }} *</label>
+              <input type="email" id="ContactFormEmail" name="contact[email]" autocorrect="off" autocapitalize="off" value="{% if form.email %}{{ form.email }}{% elsif customer %}{{ customer.email }}{% endif %}" required>
+            </div>
 
-    <input type="submit" class="btn" value="{{ 'contact.form.send' | t }}">
+            <div class="col-md-6">
+              <label for="ContactFormPhone">{{ 'contact.form.phone' | t }} *</label>
+              <input type="tel" id="ContactFormPhone" name="contact[{{ 'contact.form.phone' | t }}]" pattern="[0-9\-]*" value="{% if form[phone] %}{{ form[phone] }}{% elsif customer %}{{ customer.phone }}{% endif %}" required>
+            </div>
 
-  {% endform %}
-</div>
+            <div class="col-12">
+              <label for="ContactFormCompany">{{ 'contact.form.company' | t }}</label>
+              <input type="text" id="ContactFormCompany" name="contact[{{ 'contact.form.company' | t }}]" autocapitalize="words" value="{{ form.company }}">
+
+               <label for="ContactFormDelivery">{{ 'contact.form.delivery' | t }}</label><br>
+                <small>For Quote on Delivery of Feeding & Watering, and Stable Hardware products</small></label>
+                <textarea rows="3" id="ContactFormDelivery" name="contact[{{ 'contact.form.delivery' | t }}]"></textarea>
+
+                <label for="ContactFormMessage">{{ 'contact.form.message' | t }} *</label>
+                <textarea rows="3" id="ContactFormMessage" name="contact[{{ 'contact.form.message' | t }}]" required>{% if form.body %}{{ form.body }}{% endif %}</textarea>
+
+                <input type="submit" class="btn btn-primary" value="{{ 'contact.form.send' | t }}">
+            </div>
+          </div>
+        {% endform %}
+      </div>
+
+
+      <div class="col-md-4 order-md-first">
+        {{ page.content }}
+
+
+        {% comment %} social icons {% endcomment %}
+
+
+        <div class="d-flex align-items-center mt-2">
+          {% if settings.social_facebook_link != blank %}
+            <div class="mr-1">
+              <a href="{{ settings.social_facebook_link | escape }}" title="{{ 'layout.footer.social_platform' | t: name: shop.name, platform: 'Facebook' }}">
+                {% include 'icon-facebook' %}
+                <span class="icon__fallback-text">Facebook</span>
+              </a>
+            </div>
+          {% endif %}
+
+          {% if settings.social_twitter_link != blank %}
+            <div class="mr-1">
+              <a href="{{ settings.social_twitter_link | escape }}" title="{{ 'layout.footer.social_platform' | t: name: shop.name, platform: 'Twitter' }}">
+                {% include 'icon-twitter' %}
+                <span class="icon__fallback-text">Twitter</span>
+              </a>
+            </div>
+          {% endif %}
+
+          {% if settings.social_instagram_link != blank %}
+            <div class="mr-1">
+              <a href="{{ settings.social_instagram_link | escape }}" title="{{ 'layout.footer.social_platform' | t: name: shop.name, platform: 'Instagram' }}">
+                {% include 'icon-instagram' %}
+                <span class="icon__fallback-text">Instagram</span>
+              </a>
+            </div>
+          {% endif %}
+
+          {% if settings.social_snapchat_link != blank %}
+            <div class="mr-1">
+              <a href="{{ settings.social_snapchat_link | escape }}" title="{{ 'layout.footer.social_platform' | t: name: shop.name, platform: 'Snapchat' }}">
+                {% include 'icon-snapchat' %}
+                <span class="icon__fallback-text">Snapchat</span>
+              </a>
+            </div>
+          {% endif %}
+
+          {% if settings.social_youtube_link != blank %}
+            <div class="mr-1">
+              <a href="{{ settings.social_youtube_link | escape }}" title="{{ 'layout.footer.social_platform' | t: name: shop.name, platform: 'YouTube' }}">
+                {% include 'icon-youtube' %}
+                <span class="icon__fallback-text">YouTube</span>
+              </a>
+            </div>
+          {% endif %}
+
+          {% if settings.social_vimeo_link != blank %}
+            <div class="mr-1">
+              <a href="{{ settings.social_vimeo_link | escape }}" title="{{ 'layout.footer.social_platform' | t: name: shop.name, platform: 'Vimeo' }}">
+                {% include 'icon-vimeo' %}
+                <span class="icon__fallback-text">Vimeo</span>
+              </a>
+            </div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>  
+

@@ -1,60 +1,80 @@
-<!-- /templates/search.liquid -->
 {% paginate search.results by 12 %}
-
-  <h1 class="h2 small--text-center">
-    {% if search.performed %}
-      {% if search.results_count == 0 %}
-        {{ 'general.search.no_results_html' | t: terms: search.terms }}
-      {% else %}
-        {{ 'general.search.results_for_html' | t: terms: search.terms }}
-      {% endif %}
-    {% else %}
-      {{ 'general.search.title' | t }}
-    {% endif %}
-  </h1>
-
-  {% unless search.performed %}
-    <form action="{{ routes.search_url }}" method="get" class="search-bar medium-up--one-half" role="search">
-      {% comment %}<input type="hidden" name="type" value="product">{% endcomment %}
-      <div class="input-group">
-        <input type="search" name="q" value="{{ search.terms | escape }}" placeholder="{{ 'general.search.placeholder' | t }}" aria-label="{{ 'general.search.placeholder' | t }}" class="input-group__field">
-        <div class="input-group__btn">
-          <button type="submit" class="btn">
-            {% include 'icon-search' %}
-            <span class="icon__fallback-text">{{ 'general.search.submit' | t }}</span>
-          </button>
-        </div>
+  <div class="container px-md-2 py-lg-5 py-6">
+    <div class="row">
+      <div class="col-12">
+        <h2 class="text-center">
+          {% if search.performed %}
+            {% if search.results_count == 0 %}
+              {{ 'general.search.no_results_html' | t: terms: search.terms }}
+            {% else %}
+              {{ 'general.search.results_for_html' | t: terms: search.terms }}
+            {% endif %}
+          {% else %}
+            {{ 'general.search.title' | t }}
+          {% endif %}
+        </h2>
       </div>
-    </form>
-  {% endunless %}
-
-  {% if search.performed %}
-    <div class="grid grid--uniform">
-      {% for item in search.results %}
-
-        {% if item.object_type == 'product' %}
-
-          {% assign product = item %}
-          {% include 'product-grid-item' %}
-
-        {% else %}
-
-          <div class="grid__item medium-up--one-third small--one-half">
-            <h2 class="h3">{{ item.title | link_to: item.url }}</h2>
-            <p>{{ item.content | strip_html | truncatewords: 50 }}</p>
-          </div>
-
-        {% endif %}
-
-      {% endfor %}
     </div>
 
-    {% if paginate.pages > 1 %}
-      <div class="pagination">
-        {{ paginate | default_pagination }}
+
+    {% comment %} if search is not performed {% endcomment %}
+
+
+    {% unless search.performed %}
+      <div class="row">
+        <div class="col-12">
+          <form action="{{ routes.search_url }}" method="get" class="search-bar" role="search">
+            {% comment %}<input type="hidden" name="type" value="product">{% endcomment %}
+            <div class="input-group">
+              <input type="search" name="q" value="{{ search.terms | escape }}" placeholder="{{ 'general.search.placeholder' | t }}" aria-label="{{ 'general.search.placeholder' | t }}" class="input-group__field">
+              <div class="input-group__btn">
+                <button type="submit" class="btn btn-primary search-btn d-flex align-items-center">
+                  <span class="d-sm-flex d-none mr-1">Search</span>
+                  {% include 'icon-search' %}
+                  <span class="icon__fallback-text">{{ 'general.search.submit' | t }}</span>
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>        
+    {% endunless %}
+
+
+    {% comment %} if search is performed {% endcomment %}
+
+
+    {% if search.performed %}
+      <div class="row">
+        {% for item in search.results %}
+          {% if item.object_type == 'product' %}
+
+            {% assign product = item %}
+            
+            {% if search.results.size == 1 %}
+              {% assign grid_item_width = 'col-lg-3 col-md-4 col-6 mx-auto' %}
+            {% else %}
+              {% assign grid_item_width = 'col-lg-3 col-md-4 col-6' %}
+            {% endif %}
+
+            {% include 'product-grid-item' %}
+
+          {% else %}
+              <h3>{{ item.title | link_to: item.url }}</h3>
+              <p>{{ item.content | strip_html | truncatewords: 50 }}</p>
+            </div>
+          {% endif %}
+        {% endfor %}
+    
+      
+        {% if paginate.pages > 1 %}
+          <div class="col-12">
+            <div class="pagination">
+              {{ paginate | default_pagination }}
+            </div>
+          </div>
+        {% endif %}
       </div>
     {% endif %}
-
-  {% endif %}
-
+  </div>
 {% endpaginate %}

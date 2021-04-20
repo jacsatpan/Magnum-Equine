@@ -1,0 +1,18 @@
+{% assign videos = product.metafields.videos %}
+
+{% if videos.size > 0 %} 
+    <div class="row px-4 pt-3">
+        <div class="col-12">
+            <h5>Videos</h5>
+        </div>
+
+        {% for field in videos %}
+            <div class="col-md-6 py-1">
+                <div class="embed-container">
+                    {% assign iframe = field | last %}
+                    {{ iframe }}
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% endif %}

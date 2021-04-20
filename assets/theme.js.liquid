@@ -383,6 +383,17 @@ Slate.checkUrlHash = function() {
 // Initialize Slate's JS on docready
 $(Slate.init);
 
+theme.strings = {
+  addToCart: {{ 'products.product.add_to_cart' | t | json }},
+  itemAddedToCart: {{ 'products.product.item_added_to_cart' | t | json }},
+  soldOut: {{ 'products.product.sold_out' | t | json }},
+  unavailable: {{ 'products.product.unavailable' | t | json }},
+  viewCart: {{ 'products.product.view_cart' | t | json }},
+  zoomClose: {{ 'products.zoom.close' | t | json }},
+  zoomPrev: {{ 'products.zoom.prev' | t | json }},
+  zoomNext: {{ 'products.zoom.next' | t | json }}
+};
+
 /*!
  * enquire.js v2.1.2 - Awesome Media Queries in JavaScript
  * Copyright (c) 2014 Nick Williams - http://wicky.nillia.ms/enquire.js
@@ -2021,7 +2032,25 @@ $(document).ready(function() {
   sections.register('password-content', theme.PasswordContent);
   sections.register('map', theme.Maps);
   sections.register('product-recommendations', theme.ProductRecommendations);
-
+  
  });
 
 $(theme.init);
+
+
+// custom code 
+
+const qs = (s) => {
+  return document.querySelector(s)
+}
+
+
+const menuToggle = qs('.toggle');
+const mbMenu = qs('.mb-menu');
+
+menuToggle.addEventListener('click', () => {
+  menuToggle.classList.toggle('open');
+  mbMenu.classList.toggle('open')
+});
+
+MicroModal.init();

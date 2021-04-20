@@ -1,58 +1,56 @@
-<div class="wrapper">
-  <div class="page-width feature-row">
-    {% capture image_layout %}
-      <div class="feature-row__item">
-        {% if section.settings.image != blank %}
-          {%- assign img_url = section.settings.image | img_url: '1x1' | replace: '_1x1.', '_{width}x.' -%}
-          <div class="supports-js" style="max-width: {{ 600 | times: section.settings.image.aspect_ratio | round }}px; margin: 0 auto;">
-            <div class="feature-row__image-wrapper" style="padding-top:{{ 1 | divided_by: section.settings.image.aspect_ratio | times: 100}}%;">
-              <img class="feature-row__image lazyload"
-                   src="{{ section.settings.image | img_url: '300x300' }}"
-                   data-src="{{ img_url }}"
-                   data-widths="[180, 360, 540, 720, 900, 1080, 1296, 1512, 1728, 2048]"
-                   data-aspectratio="{{ section.settings.image.aspect_ratio }}"
-                   data-sizes="auto"
-                   alt="{{ section.settings.image.alt }}"
-                   style="max-width: {{ 600 | times: section.settings.image.aspect_ratio | round }}px; max-height: 600px;">
-            </div>
-          </div>
 
-          <noscript>
-            <div style="max-width: {{ 600 | times: section.settings.image.aspect_ratio | round }}px; margin: 0 auto;">
-              {{ section.settings.image | img_url: '600x600' | img_tag: section.settings.image.alt, 'feature-row__image' }}
-            </div>
-          </noscript>
-        {% else %}
-          {{ 'image' | placeholder_svg_tag: 'placeholder-svg' }}
-        {% endif %}
+<div class="container-fluid pt-1">
+  <div class="row image-row mr-lg-0">
+    {%- assign img_url = section.settings.image | img_url: '1x1' | replace: '_1x1.', '_{width}x.' -%}
+
+
+    {% if section.settings.layout != 'center' %}
+
+      <div class="col-xl-7 col-md-6 bg-img" style="background-image: url('{{ section.settings.image | img_url: '1200x850' }}')"></div>
+
+      <div class="img-row-content col-xl-5 col-md-6 px-xl-3 px-1 py-md-4 py-3 d-md-flex align-items-md-center {% if section.settings.layout == 'left' %} text-md-right justify-content-md-end {% elsif section.settings.layout == 'right' %} text-md-left justify-content-md-start order-md-first{% else %} text-center{% endif %}{% if section.settings.background == 'green' %} bg-primary text-white{% elsif section.settings.background == 'white' %} bg-light text-primary{% endif %}">
+        <div>
+          {% if section.settings.heading != blank %}
+            <h2 class="mb-1">{{ section.settings.heading | escape }}</h2>
+          {% endif %}
+
+          {% if section.settings.subheading != blank %}
+            <h6>{{ section.settings.subheading | escape }}</h6>
+          {% endif %}
+
+          {% if section.settings.button_label != blank and section.settings.button_link != blank %}
+            <a href="{{ section.settings.button_link }}" class="btn {% if section.settings.background == 'green' %} btn-outline-white{% elsif section.settings.background == 'white' %} btn-outline-primary{% endif %}">
+              {{ section.settings.button_label | escape }}
+            </a>
+          {% endif %}
+        </div>    
       </div>
-    {% endcapture %}
+      
+    {% elsif section.settings.layout == 'center' %}
 
-    <div class="feature-row">
-      {% if section.settings.layout == 'left' %}
-        {{ image_layout }}
-      {% endif %}
+      <div class="col-12 bg-img d-flex align-items-center justify-content-center text-white text-center" style="background-image: url('{{ section.settings.image | img_url: '2600x1000' }}')">
+        <div>
+          {% if section.settings.heading != blank %}
+              <h2 class="mb-1">
+              {{ section.settings.heading | escape }} 
+              
+              {% if section.settings.subheading != blank %}
+                <span class="text-light-weight"> {{ section.settings.subheading | escape }}</span>
+              {% endif %}
+              </h2>
+            {% endif %}
 
-      <div class="feature-row__item feature-row__text feature-row__text--{{ section.settings.layout }}">
-        {% if section.settings.title != blank %}
-          <h2 class="small--text-center">{{ section.settings.title | escape }}</h2>
-        {% endif %}
-        {% if section.settings.text != blank %}
-          <div class="rte-setting featured-row__subtext">{{ section.settings.text }}</div>
-        {% endif %}
-        {% if section.settings.button_label != blank and section.settings.button_link != blank %}
-          <a href="{{ section.settings.button_link }}" class="btn">
-            {{ section.settings.button_label | escape }}
-          </a>
-        {% endif %}
+            {% if section.settings.button_label != blank and section.settings.button_link != blank %}
+              <a href="{{ section.settings.button_link }}" class="btn btn-outline-white">
+                {{ section.settings.button_label | escape }}
+              </a>
+            {% endif %}
+        </div>
       </div>
-
-      {% if section.settings.layout == 'right' %}
-        {{ image_layout }}
-      {% endif %}
-    </div>
+    {% endif %}
   </div>
 </div>
+
 
 
 
@@ -116,7 +114,7 @@
         "cs": "Zarovnání obrázku",
         "da": "Justering af billede",
         "de": "Bildausrichtung",
-        "en": "Image alignment",
+        "en": "Image position",
         "es": "Alineación de imagen",
         "fi": "Kuvan tasaus",
         "fr": "Alignement de l'image",
@@ -188,12 +186,146 @@
             "zh-CN": "右侧",
             "zh-TW": "右方"
           }
+        },
+        {
+          "value": "center",
+          "label": {
+            "cs": "Na střed",
+            "da": "I midten",
+            "de": "Mittig",
+            "en": "Center",
+            "es": "Centrada",
+            "fi": "Keskelle",
+            "fr": "Au milieu",
+            "it": "Al centro",
+            "ja": "中央",
+            "ko": "중간",
+            "nb": "Midten",
+            "nl": "Midden",
+            "pl": "Do środka",
+            "pt-BR": "Meio",
+            "pt-PT": "Centro",
+            "sv": "Mitten",
+            "th": "ตรงกลาง",
+            "tr": "Orta",
+            "vi": "Giữa",
+            "zh-CN": "中间",
+            "zh-TW": "中央"
+          }
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "background",
+      "label": {
+        "cs": "Barva pozadí",
+        "da": "Baggrundsfarve",
+        "de": "Hintergrundfarbe",
+        "en": "Background Colour",
+        "es": "Color de fondo",
+        "fi": "Taustan väri",
+        "fr": "La couleur d'arrière-plan",
+        "it": "Colore di sfondo",
+        "ja": "背景色",
+        "ko": "배경색",
+        "nb": "Bakgrunnsfarge",
+        "nl": "Achtergrond kleur",
+        "pl": "Kolor tła",
+        "pt-BR": "Cor de fundo",
+        "pt-PT": "Cor de fundo",
+        "sv": "Bakgrundsfärg",
+        "th": "สีพื้นหลัง",
+        "tr": "Arka plan rengi",
+        "vi": "Màu nền",
+        "zh-CN": "背景色",
+        "zh-TW": "背景色"
+      },
+      "default": "white",
+      "options": [
+        {
+          "value": "white",
+          "label": {
+            "cs": "Bílý",
+            "da": "hvid",
+            "de": "Weiß",
+            "en": "White",
+            "es": "Blanco",
+            "fi": "Valkoinen",
+            "fr": "Blanc",
+            "it": "Bianca",
+            "ja": "白い",
+            "ko": "하얀",
+            "nb": "Hvit",
+            "nl": "Wit",
+            "pl": "Biały",
+            "pt-BR": "Branco",
+            "pt-PT": "Branco",
+            "sv": "Vit",
+            "th": "สีขาว",
+            "tr": "Beyaz",
+            "vi": "trắng",
+            "zh-CN": "白色",
+            "zh-TW": "白色"
+          }
+        },
+        {
+          "value": "green",
+          "label": {
+            "cs": "Zelený",
+            "da": "Grøn",
+            "de": "Grün",
+            "en": "Green",
+            "es": "Verde",
+            "fi": "Vihreä",
+            "fr": "Vert",
+            "it": "verde",
+            "ja": "緑",
+            "ko": "초록",
+            "nb": "Grønn",
+            "nl": "Groen",
+            "pl": "Zielony",
+            "pt-BR": "Verde",
+            "pt-PT": "Verde",
+            "sv": "Grön",
+            "th": "เขียว",
+            "tr": "Yeşil",
+            "vi": "màu xanh lá",
+            "zh-CN": "绿色",
+            "zh-TW": "綠色"
+          }
+        },
+        {
+          "value": "transparent",
+          "label": {
+            "cs": "Průhledná",
+            "da": "Gennemsigtig farve",
+            "de": "Transparente Farbe",
+            "en": "Transparent",
+            "es": "Transparente",
+            "fi": "Läpinäkyvä väri",
+            "fr": "Transparent",
+            "it": "Colore trasparente",
+            "ja": "透明色",
+            "ko": "투명한 색상",
+            "nb": "Gjennomsiktig farge",
+            "nl": "Transparante kleur",
+            "pl": "Przezroczysty kolor",
+            "pt-BR": "Cor Transparente",
+            "pt-PT": "Cor Transparente",
+            "sv": "Transparent färg",
+            "th": "สีโปร่งใส",
+            "tr": "Şeffaf Renk",
+            "vi": "Màu trong suốt",
+            "zh-CN": "透明色",
+            "zh-TW": "透明色"
+          }
         }
       ]
     },
     {
       "type": "text",
-      "id": "title",
+      "id": "heading",
       "label": {
         "cs": "Nadpis",
         "da": "Overskrift",
@@ -242,13 +374,13 @@
       }
     },
     {
-      "type": "richtext",
-      "id": "text",
+      "type": "text",
+      "id": "subheading",
       "label": {
         "cs": "Text",
         "da": "Tekst",
         "de": "Text",
-        "en": "Text",
+        "en": "Subheading",
         "es": "Texto",
         "fi": "Teksti",
         "fr": "Texte",
@@ -268,27 +400,27 @@
         "zh-TW": "文字"
       },
       "default": {
-        "cs": "<p>Zkombinujte velký text a obrázek, abyste zaměřili pozornost návštěvníků na zvolený produkt, kolekci či příspěvek na blogu. Pak můžete připojit podrobnosti o dostupnosti, stylu, nebo dokonce recenzi.</p>",
-        "da": "<p>Kombiner stor tekst med et billede for at give dit valgte produkt, din valgte kollektion eller dit valgte blogopslag fokus. Tilføj oplysninger om tilgængelighed, stil og eventuelt også en anmeldelse.</p>",
-        "de": "<p>Kombiniere lange Texte mit einem Bild, um den Fokus auf dein Produkt, deine Kategorie oder deinen Blogpost zu richten. Du kannst außerdem weitere Details über die Verfügbarkeit oder den Stil und sogar eine Bewertung hinzufügen.</p>",
-        "en": "<p>Pair large text with an image to give focus to your chosen product, collection, or blog post. Add details on availability, style, or even provide a review.</p>",
-        "es": "<p>Vincula un texto largo con una imagen para dar visibilidad a tu producto, colección o artículo de blog seleccionados. Agrega detalles sobre disponibilidad, estilo, o incluso ofrece una reseña.</p>",
-        "fi": "<p>Korosta valitsemaasi tuotetta, kokoelmaa tai blogijulkaisua lisäämällä kuvaan suuri teksti. Lisää saatavuustiedot, määritä tyyli tai näytä vaikkapa arvostelu.</p>",
-        "fr": "<p>Associez un texte de grande taille à une image pour mettre en relief le produit, la collection ou l'article de blog de votre choix. Ajoutez des informations sur la disponibilité ou le style. Vous pouvez même fournir un avis.</p>",
-        "it": "<p>Associa un testo di grandi dimensioni a un'immagine per dare importanza al tuo prodotto, collezione o articolo del blog scelto. Aggiungi dettagli sulla disponibilità, sullo stile o fornisci anche una recensione.</p>",
-        "ja": "<p>あなたが選んだ商品、コレクション、またはブログ記事に注目を集めるため、大きなテキストと画像を組み合わせます。可用性、スタイル、またはレビュー提供についての詳細を追加します。</p>",
-        "ko": "<p>이미지와 큰 텍스트를 짝지어 선택한 제품, 컬렉션, 블로그 게시판을 강조합니다. 사용 가능성, 스타일에 대한 자세한 정보를 추가하거나 리뷰를 제공합니다.</p>",
-        "nb": "<p>Koble stor tekst med et bilde for å drive fokus mot det valgte produktet, samlingen eller blogginnlegget. Legg til detaljer om tilgjengelighet, stil eller vis frem en vurdering.</p>",
-        "nl": "<p>Plaats een afbeelding bij grote stukken tekst om de aandacht op je gekozen product, collectie of blogpost te richten. Voeg details over beschikbaarheid en stijl toe of plaats een productrecensie.</p>",
-        "pl": "<p>Połącz duży tekst z obrazem, aby skierować uwagę na wybrany produkt, kolekcję lub wpis na blogu. Dodaj szczegóły dotyczące dostępności, stylu lub nawet dołącz recenzję.</p>",
-        "pt-BR": "<p>Emparelhe textos grandes com uma imagem para destacar o produto, a coleção ou o post do blog escolhido. Adicione informações sobre disponibilidade, estilo ou até mesmo uma avaliação.</p>",
-        "pt-PT": "<p>Associe um texto grande a uma imagem para dar ênfase ao produto, coleção ou publicação no blogue que escolheu. Adicione detalhes sobre disponibilidade, estilo ou uma avaliação.</p>",
-        "sv": "<p>Para ihop stor text med en bild för att ge fokus åt din valda produkt, kollektion eller blogginlägg. Lägg till information om tillgänglighet, stil eller tillhandahåll till och med en recension.</p>",
-        "th": "<p>จับคู่ข้อความขนาดใหญ่กับรูปภาพเพื่อให้ความสำคัญกับสินค้า คอลเลกชัน หรือโพสต์บล็อกที่คุณเลือก เพิ่มรายละเอียดเกี่ยวกับความพร้อม สไตล์ หรือแม้กระทั่งเขียนรีวิว</p>",
-        "tr": "<p>Geniş metni bir görselle eşleyerek seçtiğiniz ürüne, koleksiyona veya blog gönderisine dikkat çekin. Stok durumu, stil hakkındaki ayrıntıları ekleyin, hatta inceleme sağlayın.</p>",
-        "vi": "<p>Ghép nối văn bản lớn với hình ảnh để làm nổi bật sản phẩm, bộ sưu tập hoặc bài viết blog đã chọn. Thêm chi tiết về tình trạng còn hàng, kiểu hoặc đưa ra đánh giá.</p>",
-        "zh-CN": "<p>将大文本与图片配对，以便将焦点置于您选择的产品、产品系列或博客文章。添加有关可用性和样式的详细信息，甚至是提供评论。</p>",
-        "zh-TW": "<p>大型文字搭配圖片，以便強調特定產品、商品系列或部落格貼文。您可以加上各種有關可用性、樣式的資料，甚至可以提供使用心得。</p>"
+        "cs": "Zkombinujte text a obrázek, abyste zaměřili pozornost návštěvníků na zvolený produkt, kolekci či příspěvek na blogu",
+        "da": "Kombiner tekst med et billede for at give dit valgte produkt, din valgte kollektion eller dit valgte blogopslag fokus",
+        "de": "Kombiniere Texte mit einem Bild, um den Fokus auf dein Produkt, deine Kategorie oder deinen Blogpost zu richten",
+        "en": "Pair text with an image to give focus to your chosen product, collection, or blog post",
+        "es": "Vincula un texto con una imagen para dar visibilidad a tu producto, colección o artículo de blog seleccionados",
+        "fi": "Korosta valitsemaasi tuotetta, kokoelmaa tai blogijulkaisua lisäämällä kuvaan suuri teksti. Lisää saatavuustiedot, määritä tyyli tai näytä vaikkapa arvostelu</p>",
+        "fr": "Associez un texte taille à une image pour mettre en relief le produit, la collection ou l'article de blog de votre choix",
+        "it": "Associa un testo dimensioni a un'immagine per dare importanza al tuo prodotto, collezione o articolo del blog scelto",
+        "ja": "あなたが選んだ商品、コレクション、またはブログ記事に注目を集めるため、大きなテキストと画像を組み合わせます",
+        "ko": "이미지와 큰 텍스트를 짝지어 선택한 제품, 컬렉션, 블로그 게시판을 강조합니다",
+        "nb": "Koble stor tekst med et bilde for å drive fokus mot det valgte produktet, samlingen eller blogginnlegget",
+        "nl": "Plaats een afbeelding bij grote stukken tekst om de aandacht op je gekozen product, collectie of blogpost te richten",
+        "pl": "Połącz duży tekst z obrazem, aby skierować uwagę na wybrany produkt, kolekcję lub wpis na blogu",
+        "pt-BR": "Emparelhe textos com uma imagem para destacar o produto, a coleção ou o post do blog escolhido",
+        "pt-PT": "Associe um texto a uma imagem para dar ênfase ao produto, coleção ou publicação no blogue que escolheu",
+        "sv": "Para ihop text med en bild för att ge fokus åt din valda produkt, kollektion eller blogginlägg",
+        "th": "จับคู่ข้อความขนาดใหญ่กับรูปภาพเพื่อให้ความสำคัญกับสินค้า คอลเลกชัน",
+        "tr": "Geniş metni bir görselle eşleyerek seçtiğiniz ürüne, koleksiyona veya blog gönderisine dikkat çekin.",
+        "vi": "Ghép nối văn bản lớn với hình ảnh để làm nổi bật sản phẩm, bộ sưu tập hoặc bài viết blog đã chọn",
+        "zh-CN": "将大文本与图片配对，以便将焦点置于您选择的产品、产品系列或博客文章",
+        "zh-TW": "大型文字搭配圖片，以便強調特定產品、商品系列或部落格貼文"
       }
     },
     {

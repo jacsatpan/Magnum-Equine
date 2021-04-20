@@ -12,6 +12,7 @@
     {%- assign min_aspect_ratio = section.blocks[0].settings.image.aspect_ratio | default: 2.0 -%}
 {%- endcase -%}
 
+
 {%- unless section.settings.slider_height == 'adapt' -%}
   {%- style -%}
     #flexslider--{{ section.id }} .slides__slide,
@@ -30,8 +31,10 @@
   {%- endstyle -%}
 {%- endunless -%}
 
+
 {%- if section.blocks.size > 0 -%}
   {%- assign arrow_offset = section.blocks.size | times: 10 | plus: 60 -%}
+  
   {%- style -%}
     .slider__controls-button--prev {
       left: calc(50% - {{ arrow_offset }}px);
@@ -51,139 +54,110 @@
       {%- endif -%}
     {%- endif -%}
   {%- endstyle -%}
-  <div class="index-section slideshow-container"
-       role="region"
-       tabindex="-1"
-       aria-label="slideshow"
-       aria-describedby="slideshow-info">
-    <div class="flexslider flexslider--{{ section.settings.slider_home_transition }}{% if section.settings.slider_height ==  'adapt' %} flexslider--adapt{% endif %}"
-         id="flexslider--{{ section.id }}"
-         data-section-id="{{ section.id }}"
-         data-section-type="slideshow-section"
-         data-transition="{{ section.settings.slider_home_transition }}"
-         data-autoplay="{{ section.settings.slider_home_auto }}"
-         data-speed="{{ section.settings.slider_home_rate | times: 1000 }}"
-         data-slide-nav-a11y="{{ 'homepage.slideshow.load_slide' | t: slide_number: '[slide_number]' }}"
-         data-slide-nav-active-a11y="{{ 'homepage.slideshow.active_slide' | t: slide_number: '[slide_number]' }}">
-      <ul class="slides supports-js">
-        {%- for block in section.blocks -%}
-          {%- assign img_url = block.settings.image | img_url: '1x1' | replace: '_1x1.', '_{width}x.' -%}
 
-          {%- if block.settings.image.width < max_width -%}
-            {%- assign slide_width = block.settings.image.width -%}
-          {%- endif -%}
 
-          {%- style -%}
-            #slide--{{ block.id }} .slides__title,
-            #slide--{{ block.id }}_clone .slides__title {
-              color: {{ block.settings.color_text }};
-            }
-            #slide--{{ block.id }}:not(.slide-hide)::before, #slide--{{ block.id }}_clone:not(.slide-hide)::before {
-              opacity: {{ block.settings.overlay_opacity | divided_by: 100.00 }};
-            }
-          {%- endstyle -%}
-            <li id="slide--{{ block.id }}"
-              class="slides__slide slide-hide"
-              data-slider-item
-              data-flexslider-index="{{ forloop.index0 }}"
-              {{ block.shopify_attributes }}>
-            {%- if block.settings.image != blank -%}
-              <img class="slides__image lazyload{% unless forloop.first == true %} lazypreload{% endunless %}"
-                    src="{{ block.settings.image | img_url: '300x300' }}"
-                    data-src="{{ img_url }}"
-                    data-widths="[180, 360, 470, 600, 770, 970, 1060, 1280, 1512, 1728, 2048]"
-                    data-aspectratio="{{ block.settings.image.aspect_ratio }}"
-                    data-sizes="auto"
-                    style="{%- if slide_width <= max_width -%}
-                             {%- assign min_width = slide_width | times: 100 | divided_by: max_width -%}
-                             min-width: {{ min_width }}%;
-                           {%- endif -%}
-                           object-position: {{ block.settings.alignment }};"
-                    alt="{{ block.settings.image.alt | escape }}">
-            {%- else -%}
-              <span>
-                {% capture current %}{% cycle 1, 2 %}{% endcapture %}
-                {{ 'lifestyle-' | append: current | placeholder_svg_tag: 'placeholder-svg' }}
-              </span>
+  <div class="container-fluid pt-1 slideshow-container" role="region" tabindex="-1" aria-label="slideshow" aria-describedby="slideshow-info">
+    <div class="row">
+      <div class="col-12 px-0">
+        <div class="flexslider flexslider--{{ section.settings.slider_home_transition }}{% if section.settings.slider_height ==  'adapt' %} flexslider--adapt{% endif %}" id="flexslider--{{ section.id }}"
+         data-section-id="{{ section.id }}" data-section-type="slideshow-section" data-transition="{{ section.settings.slider_home_transition }}" data-autoplay="{{ section.settings.slider_home_auto }}"
+         data-speed="{{ section.settings.slider_home_rate | times: 1000 }}" data-slide-nav-a11y="{{ 'homepage.slideshow.load_slide' | t: slide_number: '[slide_number]' }}" data-slide-nav-active-a11y="{{ 'homepage.slideshow.active_slide' | t: slide_number: '[slide_number]' }}">
+          <ul class="slides supports-js">
+            {%- for block in section.blocks -%}
+              {%- assign img_url = block.settings.image | img_url: '1x1' | replace: '_1x1.', '_{width}x.' -%}
+
+              {%- if block.settings.image.width < max_width -%}
+                {%- assign slide_width = block.settings.image.width -%}
+              {%- endif -%}
+
+              {%- style -%}
+                #slide--{{ block.id }}:not(.slide-hide)::before, #slide--{{ block.id }}_clone:not(.slide-hide)::before {
+                  opacity: {{ block.settings.overlay_opacity | divided_by: 100.00 }};
+                }
+              {%- endstyle -%}
+
+              <li id="slide--{{ block.id }}" class="slides__slide slide-hide" data-slider-item data-flexslider-index="{{ forloop.index0 }}" {{ block.shopify_attributes }}>
+                {%- if block.settings.image != blank -%}
+                  <img class="slides__image lazyload{% unless forloop.first == true %} lazypreload{% endunless %}" src="{{ block.settings.image | img_url: '300x300' }}" data-src="{{ img_url }}"
+                  data-widths="[180, 360, 470, 600, 770, 970, 1060, 1280, 1512, 1728, 2048]" data-aspectratio="{{ block.settings.image.aspect_ratio }}" data-sizes="auto"
+                  style="{%- if slide_width <= max_width -%}{%- assign min_width = slide_width | times: 100 | divided_by: max_width -%}min-width: {{ min_width }}%;{%- endif -%}object-position: {{ block.settings.alignment }};"
+                  alt="{{ block.settings.image.alt | escape }}">
+                {%- else -%}
+                  <span>
+                    {% capture current %}{% cycle 1, 2 %}{% endcapture %}
+                    {{ 'lifestyle-' | append: current | placeholder_svg_tag: 'placeholder-svg' }}
+                  </span>
+                {%- endif -%}
+                
+                
+                {%- assign show_link_button = false -%}
+                {%- if block.settings.button_label != blank and block.settings.button_link != blank -%}
+                  {%- assign show_link_button = true -%}
+                {%- endif -%}
+                
+
+                {%- unless block.settings.slide_heading == blank and show_link_button == false -%}
+                  <div class="slides__text-content text-{{ block.settings.text_alignment }}">
+                    <div class="slides-text-content-wrapper-{{ block.settings.text_alignment }}">
+                      {%- unless block.settings.slide_heading == blank -%}
+                        <h2 style="color: {{ block.settings.color_text }} !important">{{ block.settings.slide_heading | escape }}</h2>
+                      {%- endunless -%}
+                      {%- if show_link_button -%}
+                        <a href="{{ block.settings.button_link }}" class="btn btn-primary">
+                          {{ block.settings.button_label | escape }}
+                        </a>
+                      {%- endif -%}
+                    </div>
+                  </div>
+                {%- endunless -%}
+              </li>
+            {%- endfor -%}
+          </ul>
+
+          <noscript>
+            {{ section.blocks[0].settings.image | img_url: '970x', scale: 2 | img_tag: block.settings.image.alt }}
+          </noscript>
+        </div>
+      </div>
+
+      <div class="col-12 px-0">
+        {%- if section.blocks.size > 1 -%}
+          <div class="slider__controls-container" data-slider-controls>
+            {%- if section.settings.slider_home_auto -%}
+              <button class="slider__controls-button slider__controls-button--pause" aria-live="polite" aria-label="{{ 'homepage.slideshow.pause' | t }}" aria-pressed="false"
+              data-label-pause="{{ 'homepage.slideshow.pause' | t }}" data-label-play="{{ 'homepage.slideshow.play' | t }}" data-slider-pause>
+                {% include 'icon-pause' %}
+                {% include 'icon-play' %}
+              </button>
             {%- endif -%}
-
+          </div>
+        {%- endif -%}
+        
+        
+        <div class="slideshow__mobile-text-container">
+          {%- for block in section.blocks -%}
             {%- assign show_link_button = false -%}
+            
             {%- if block.settings.button_label != blank and block.settings.button_link != blank -%}
               {%- assign show_link_button = true -%}
             {%- endif -%}
+            
             {%- unless block.settings.slide_heading == blank and show_link_button == false -%}
-              <div class="slides__text-content text-{{ block.settings.text_alignment }}">
-                <div class="slides-text-content-wrapper-{{ block.settings.text_alignment }}">
-                  {%- unless block.settings.slide_heading == blank -%}
-                    <h2 class="slides__title slides__title--{{ section.settings.text_size }} h1">
-                      {{ block.settings.slide_heading | escape }}
-                    </h2>
-                  {%- endunless -%}
-                  {%- if show_link_button -%}
-                    <a href="{{ block.settings.button_link }}" class="slides__btn btn">
-                      {{ block.settings.button_label | escape }}
-                    </a>
-                  {%- endif -%}
-                </div>
+              <div class="slides__text-content slides__text-content--mobile text-center" data-mobile-slide-text="{{ forloop.index0 }}" data-text-mobile>
+                {%- unless block.settings.slide_heading == blank -%}
+                  <h2 style="color: {{ block.settings.color_text }} !important">{{ block.settings.slide_heading | escape }}</h2>
+                {%- endunless -%}
+                
+                {%- if show_link_button -%}
+                  <a href="{{ block.settings.button_link }}" class="slides__btn slides__btn--mobile btn">
+                    {{ block.settings.button_label | escape }}
+                  </a>
+                {%- endif -%}
               </div>
             {%- endunless -%}
-          </li>
-        {%- endfor -%}
-      </ul>
-
-      <noscript>
-        {{ section.blocks[0].settings.image | img_url: '970x', scale: 2 | img_tag: block.settings.image.alt }}
-      </noscript>
-    </div>
-    {%- if section.blocks.size > 1 -%}
-      <div class="slider__controls-container" data-slider-controls>
-        {%- if section.settings.slider_home_auto -%}
-          <button class="slider__controls-button slider__controls-button--pause"
-                  aria-live="polite"
-                  aria-label="{{ 'homepage.slideshow.pause' | t }}"
-                  aria-pressed="false"
-                  data-label-pause="{{ 'homepage.slideshow.pause' | t }}"
-                  data-label-play="{{ 'homepage.slideshow.play' | t }}"
-                  data-slider-pause>
-            {% include 'icon-pause' %}
-            {% include 'icon-play' %}
-          </button>
-        {%- endif -%}
-        <ul class="slider-navigation">
-          <li>
-            <button class="slider__controls-button slider__controls-button--prev" aria-label="{{ 'homepage.slideshow.previous_slide' | t }}" data-slider-navigation data-slider-prev>
-              {% include 'icon-chevron-left' %}
-            </button>
-          </li>
-          <li>
-            <button class="slider__controls-button slider__controls-button--next" aria-label="{{ 'homepage.slideshow.next_slide' | t }}" data-slider-navigation>
-              {% include 'icon-chevron-right' %}
-            </button>
-          </li>
-        </ul>
+          {%- endfor -%}
+        </div>
       </div>
-    {%- endif -%}
-    <div class="slideshow__mobile-text-container">
-      {%- for block in section.blocks -%}
-        {%- assign show_link_button = false -%}
-        {%- if block.settings.button_label != blank and block.settings.button_link != blank -%}
-          {%- assign show_link_button = true -%}
-        {%- endif -%}
-        {%- unless block.settings.slide_heading == blank and show_link_button == false -%}
-          <div class="slides__text-content slides__text-content--mobile text-center" data-mobile-slide-text="{{ forloop.index0 }}" data-text-mobile>
-            {%- unless block.settings.slide_heading == blank -%}
-              <h2 class="slides__title slides__title--mobile slides__title--{{ section.settings.text_size }} h1">
-                {{ block.settings.slide_heading | escape }}
-              </h2>
-            {%- endunless -%}
-            {%- if show_link_button -%}
-              <a href="{{ block.settings.button_link }}" class="slides__btn slides__btn--mobile btn">
-                {{ block.settings.button_label | escape }}
-              </a>
-            {%- endif -%}
-          </div>
-        {%- endunless -%}
-      {%- endfor -%}
     </div>
   </div>
 {%- endif -%}

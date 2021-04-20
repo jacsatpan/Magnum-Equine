@@ -1,0 +1,9 @@
+{% assign custom_button = product.metafields.custom_button %}
+{% if custom_button.size > 0 %}
+    {% for field in custom_button %}
+        <div class="mt-2">
+            {% assign button = field | last %}
+            {{ button }}
+        </div>
+    {% endfor %}
+{% endif %}

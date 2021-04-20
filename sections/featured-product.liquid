@@ -16,15 +16,21 @@
   {%- assign price = current_variant.price -%}
 {%- endif -%}
 
-<div itemscope itemtype="http://schema.org/Product" id="ProductSection-{{ section.id }}" data-section-id="{{ section.id }}" data-section-type="product-template" data-image-zoom-type="" data-show-extra-tab="false" data-extra-tab-content="false" data-cart-enable-ajax="{{ settings.cart_enable_ajax }}" data-enable-history-state="false">
 
+
+<div class="container-fluid pt-1" itemscope itemtype="http://schema.org/Product" id="ProductSection-{{ section.id }}" data-section-id="{{ section.id }}" data-section-type="product-template" data-image-zoom-type="" data-show-extra-tab="false" data-extra-tab-content="false" data-cart-enable-ajax="{{ settings.cart_enable_ajax }}" data-enable-history-state="false">
   <meta itemprop="name" content="{{ title }}">
   <meta itemprop="url" content="{{ shop.url }}{{ product.url }}">
   <meta itemprop="image" content="{{ product.featured_image.src | img_url: 'grande' }}">
 
-  <div class="grid product-single">
 
-    <div class="grid__item medium-up--one-half">
+  <div class="row">
+
+
+    {% comment %} image {% endcomment %}
+
+
+    <div class="col-md-6">
       {% unless section_onboarding %}
         {% for image in product.images %}
           {% capture img_id %}ProductImage-{{ image.id }}{% endcapture %}
@@ -35,15 +41,10 @@
 
           <div id="{{ wrapper_id }}" class="product-single__featured-image-wrapper supports-js{% unless featured_image == image %} hidden{% endunless %}" data-image-id="{{ image.id }}">
             <div class="product-single__photos" data-image-id="{{ image.id }}" style="padding-top:{{ 1 | divided_by: image.aspect_ratio | times: 100}}%;">
-              <img id="{{ img_id }}"
-                  class="product-single__photo lazyload{% unless featured_image == image %} lazypreload{% endunless %}"
-                  src="{{ image | img_url: '200x200' }}"
-                  data-src="{{ img_url }}"
-                  data-widths="[180, 360, 470, 600, 750, 940, 1080, 1296, 1512, 1728, 2048]"
-                  data-aspectratio="{{ image.aspect_ratio }}"
-                  data-sizes="auto"
-                  alt="{{ image.alt | escape }}">
+              <img id="{{ img_id }}" class="product-single__photo lazyload{% unless featured_image == image %} lazypreload{% endunless %}" src="{{ image | img_url: '200x200' }}" data-src="{{ img_url }}"
+              data-widths="[180, 360, 470, 600, 750, 940, 1080, 1296, 1512, 1728, 2048]" data-aspectratio="{{ image.aspect_ratio }}" data-sizes="auto" alt="{{ image.alt | escape }}">
             </div>
+
             {% if compare_at_price > price %}
               <span class="badge badge--sale"><span>{{ 'products.product.on_sale' | t }}</span></span>
             {% endif %}
@@ -53,122 +54,134 @@
         <noscript>
           <img src="{{ featured_image | img_url: 'grande' }}" alt="{{ featured_image.alt | escape }}">
         </noscript>
+
       {% else %}
         {{ 'product-1' | placeholder_svg_tag: 'placeholder-svg' }}
       {% endunless %}
     </div>
 
-    <div class="grid__item medium-up--one-half{% if product.images.size == 0 and section_onboarding == false %} medium-up--push-one-half{% endif %}">
-      <div class="product-single__meta small--text-center">
-        <h1 class="product-single__title" itemprop="name">{{ title }}</h1>
 
-        {% if section.settings.vendor_show %}
-          <p class="product-single__vendor" itemprop="brand">{{ vendor }}</p>
-        {% endif %}
+    {% comment %} product information {% endcomment %}
 
-        <p class="product-single__prices">
-          {% if compare_at_price > price %}
-            <span id="ComparePriceA11y" class="visually-hidden">{{ 'products.product.sale_price' | t }}</span>
-          {% else %}
-            <span class="visually-hidden">{{ 'products.product.regular_price' | t }}</span>
-          {% endif %}
-          <span id="ProductPrice" class="product-single__price" itemprop="price" content="{{ price | divided_by: 100.00 }}">
-            {{ price | money }}
-          </span>
 
-          {% if compare_at_price > price %}
-            <span id="PriceA11y" class="visually-hidden">{{ 'products.product.regular_price' | t }}</span>
-            <s class="product-single__price--compare" id="ComparePrice">
-              {{ compare_at_price | money }}
-            </s>
+    <div class="col-md-6 d-flex align-items-center">
+      <div>
+        <div class="product-single__meta">
+          <h3 class="product-single__title" itemprop="name">{{ title }}</h3>
+
+          {% if section.settings.vendor_show %}
+            <p class="product-single__vendor" itemprop="brand">{{ vendor }}</p>
           {% endif %}
 
-          {% include 'product-unit-price', variant: current_variant, available: true %}
-        </p>
+          <p class="product-single__prices">
+            {% if compare_at_price > price %}
+              <span id="ComparePriceA11y" class="visually-hidden">{{ 'products.product.sale_price' | t }}</span>
+            {% else %}
+              <span class="visually-hidden">{{ 'products.product.regular_price' | t }}</span>
+            {% endif %}
+            
+            <span id="ProductPrice" class="product-single__price" itemprop="price" content="{{ price | divided_by: 100.00 }}">
+              {{ price | money }}
+            </span>
 
-        {%- if cart.taxes_included or shop.shipping_policy.body != blank -%}
-          <div class="product-single__policies rte">
-            {%- if cart.taxes_included -%}
-              {{ 'products.product.include_taxes' | t }}
-            {%- endif -%}
-            {%- if shop.shipping_policy.body != blank -%}
-              {{ 'products.product.shipping_policy_html' | t: link: shop.shipping_policy.url }}
-            {%- endif -%}
-          </div>
-        {%- endif -%}
+            {% if compare_at_price > price %}
+              <span id="PriceA11y" class="visually-hidden">{{ 'products.product.regular_price' | t }}</span>
+              <s class="product-single__price--compare" id="ComparePrice">
+                {{ compare_at_price | money }}
+              </s>
+            {% endif %}
 
-        <div itemprop="offers" itemscope itemtype="http://schema.org/Offer">
-          <meta itemprop="priceCurrency" content="{{ cart.currency.iso_code }}">
+            {% include 'product-unit-price', variant: current_variant, available: true %}
+          </p>
 
-          <link itemprop="availability" href="http://schema.org/{% if current_variant.available %}InStock{% else %}OutOfStock{% endif %}">
+          {%- if shop.taxes_included or shop.shipping_policy.body != blank -%}
+            <div class="product-single__policies rte">
+              {%- if shop.taxes_included -%}
+                {{ 'products.product.include_taxes' | t }}
+              {%- endif -%}
+              {%- if shop.shipping_policy.body != blank -%}
+                {{ 'products.product.shipping_policy_html' | t: link: shop.shipping_policy.url }}
+              {%- endif -%}
+            </div>
+          {%- endif -%}
 
-          {% unless product == empty %}
-            {%- assign productClasses = 'product-form' -%}
-            {%- if product.has_only_default_variant -%}
-              {%- assign productClasses = productClasses | append: ' product-form--default-variant-only' -%}
-            {%- endif -%}
+          <div itemprop="offers" itemscope itemtype="http://schema.org/Offer">
+            <meta itemprop="priceCurrency" content="{{ cart.currency.iso_code }}">
 
-            {% form 'product', product, class: productClasses %}
-              <select name="id" id="ProductSelect-{{ section.id }}" class="product-single__variants">
-                {% for variant in product.variants %}
-                  {% if variant.available %}
-                    <option {% if variant == product.selected_or_first_available_variant %} selected="selected" {% endif %} data-sku="{{ variant.sku }}" value="{{ variant.id }}">{{ variant.title }} - {{ variant.price | money_with_currency }}</option>
-                  {% else %}
-                    <option disabled="disabled">
-                      {{ variant.title }} - {{ 'products.product.sold_out' | t }}
-                    </option>
-                  {% endif %}
-                {% endfor %}
-              </select>
+            <link itemprop="availability" href="http://schema.org/{% if current_variant.available %}InStock{% else %}OutOfStock{% endif %}">
 
-              {% if section.settings.product_quantity_enable %}
-                <div class="product-single__quantity">
-                  <label for="Quantity">{{ 'products.product.quantity' | t }}</label>
-                  <input type="number" id="Quantity" name="quantity" value="1" min="1">
-                </div>
-              {% endif %}
+            {% unless product == empty %}
+              {%- assign productClasses = 'product-form' -%}
+              {%- if product.has_only_default_variant -%}
+                {%- assign productClasses = productClasses | append: ' product-form--default-variant-only' -%}
+              {%- endif -%}
 
-              <div class="product-single__cart-submit-wrapper{% if section.settings.enable_payment_button %} product-single__shopify-payment-btn{% endif %}{% if section.settings.add_to_cart_width == 'full_width' %} product-form--full{% endif %}">
-                <button type="submit" name="add" id="AddToCart" class="btn product-single__cart-submit{% if section.settings.add_to_cart_width == 'full_width' %} btn--full{% endif %}{% if section.settings.enable_payment_button %} shopify-payment-btn btn--secondary{% endif %}"
-                  {% unless current_variant.available %} disabled="disabled"{% endunless %} data-cart-url="{{ routes.cart_url }}">
-                  <span id="AddToCartText">
-                    {% if current_variant.available %}
-                      {{ 'products.product.add_to_cart' | t }}
+              {% form 'product', product, class: productClasses %}
+                <select name="id" id="ProductSelect-{{ section.id }}" class="product-single__variants">
+                  {% for variant in product.variants %}
+                    {% if variant.available %}
+                      <option {% if variant == product.selected_or_first_available_variant %} selected="selected" {% endif %} data-sku="{{ variant.sku }}" value="{{ variant.id }}">{{ variant.title }} - {{ variant.price | money_with_currency }}</option>
                     {% else %}
-                      {{ 'products.product.sold_out' | t }}
+                      <option disabled="disabled">
+                        {{ variant.title }} - {{ 'products.product.sold_out' | t }}
+                      </option>
                     {% endif %}
+                  {% endfor %}
+                </select>
+
+                {% if section.settings.product_quantity_enable %}
+                  <div class="product-single__quantity">
+                    <label for="Quantity">{{ 'products.product.quantity' | t }}</label>
+                    <input type="number" id="Quantity" name="quantity" value="1" min="1">
+                  </div>
+                {% endif %}
+
+                <div class="product-single__cart-submit-wrapper{% if section.settings.enable_payment_button %} product-single__shopify-payment-btn{% endif %}{% if section.settings.add_to_cart_width == 'full_width' %} product-form--full{% endif %}">
+                  <button type="submit" name="add" id="AddToCart" class="btn product-single__cart-submit{% if section.settings.add_to_cart_width == 'full_width' %} btn--full{% endif %}{% if section.settings.enable_payment_button %} btn btn-primary{% endif %}"
+                    {% unless current_variant.available %} disabled="disabled"{% endunless %} data-cart-url="{{ routes.cart_url }}">
+                    <span id="AddToCartText">
+                      {% if current_variant.available %}
+                        {{ 'products.product.add_to_cart' | t }}
+                      {% else %}
+                        {{ 'products.product.sold_out' | t }}
+                      {% endif %}
+                    </span>
+                  </button>
+                  {% if section.settings.enable_payment_button %}
+                    {{ form | payment_button }}
+                  {% endif %}
+                </div>
+
+              {% endform %}
+            {% else %}
+              <div class="product-single__cart-submit-wrapper product-single__cart-submit-wrapper--onboarding">
+                <button type="submit" name="add" id="AddToCart" class="btn product-single__cart-submit" disabled="disabled">
+                  <span id="AddToCartText">
+                    {{ 'products.product.sold_out' | t }}
                   </span>
                 </button>
-                {% if section.settings.enable_payment_button %}
-                  {{ form | payment_button }}
-                {% endif %}
               </div>
+            {% endunless %}
+          </div>
 
-            {% endform %}
-          {% else %}
-            <div class="product-single__cart-submit-wrapper product-single__cart-submit-wrapper--onboarding">
-              <button type="submit" name="add" id="AddToCart" class="btn product-single__cart-submit" disabled="disabled">
-                <span id="AddToCartText">
-                  {{ 'products.product.sold_out' | t }}
-                </span>
-              </button>
-            </div>
-          {% endunless %}
+          <a class="product-single__full-details text-link"{% unless section_onboarding %} href="{{ product.url }}?variant={{ current_variant.id }}"{% endunless %}>
+            {{ 'products.product.full_details' | t }} &#x2192;
+          </a>
 
+          {% if section.settings.social_sharing_products %}
+            {% include 'social-sharing', share_title: title, share_permalink: product.url, share_image: product %}
+          {% endif %}
         </div>
-
-        <a class="product-single__full-details text-link"{% unless section_onboarding %} href="{{ product.url }}?variant={{ current_variant.id }}"{% endunless %}>
-          {{ 'products.product.full_details' | t }} &#x2192;
-        </a>
-
-        {% if section.settings.social_sharing_products %}
-          {% include 'social-sharing', share_title: title, share_permalink: product.url, share_image: product %}
-        {% endif %}
       </div>
     </div>
-
   </div>
 </div>
+
+
+
+<div >
+
+  
 
 {% unless product == empty %}
   <script type="application/json" id="ProductJson-{{ section.id }}">
@@ -286,7 +299,7 @@
         "nb": "Vis leverandør",
         "nl": "Leverancier weergeven",
         "pl": "Pokaż dostawcę",
-        "pt-BR": "Exibir fabricante",
+        "pt-BR": "Exibir fornecedor",
         "pt-PT": "Mostrar fornecedor",
         "sv": "Visa säljare",
         "th": "แสดงผู้ขาย",
@@ -388,7 +401,7 @@
         "ja": "動的チェックアウトボタンを表示する",
         "ko": "동적 결제 버튼 표시",
         "nb": "Vis dynamisk knapp for å gå til kassen",
-        "nl": "Dynamische checkoutknop weergeven",
+        "nl": "Dynamische betaalknop weergeven",
         "pl": "Pokaż dynamiczny przycisk realizacji zakupu",
         "pt-BR": "Exibir botão de checkout dinâmico",
         "pt-PT": "Mostrar o botão dinâmico de finalização da compra",
