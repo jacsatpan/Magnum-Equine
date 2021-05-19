@@ -1,12 +1,13 @@
 {% assign details = product.metafields.details %}
 {% assign specifications = product.metafields.specifications %}
 {% assign faq = product.metafields.faq %}
+{% assign pricing = product.metafields.pricing %}
 {% assign custom_attributes = product.metafields.custom_attributes %}
 
 
 
 
-{% if details.size > 0 or specifications.size > 0 or faq.size > 0 or custom_attributes.size > 0  %} 
+{% if details.size > 0 or specifications.size > 0 or faq.size > 0 or pricing.size > 0 or custom_attributes.size > 0  %} 
     <div class="row">
         <div class="col-12 pt-3 px-xl-4">
             <div id="accordion" class="accordion-container">
@@ -30,6 +31,16 @@
                     </div>
                 {% endfor %}
 
+                {% for field in pricing %}
+                    {% assign pricing_code = field | first %}
+                    {% assign pricing_value = field | last %}
+                    
+                    <h5 class="accordion-title js-accordion-title">{{ pricing_code }}</h5>
+                    <div class="accordion-content">
+                        {{ pricing_value }}
+                    </div>
+                {% endfor %}
+
                 {% for field in faq %}
                     {% assign faq_code = field | first %}
                     {% assign faq_value = field | last %}
@@ -38,7 +49,7 @@
                     <div class="accordion-content">
                         {{ faq_value }}
                     </div>
-                {% endfor %}
+                {% endfor %}                
 
                 {% for field in custom_attributes %}
                     {% assign attribute_code = field | first %}

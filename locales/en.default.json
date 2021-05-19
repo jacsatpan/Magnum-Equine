@@ -122,6 +122,8 @@
       "name": "Name",
       "email": "Email",
       "phone": "Phone Number",
+      "company": "Company",
+      "delivery": "Delivery Address",
       "message": "Message",
       "send": "Send",
       "post_success": "Thanks for contacting us. We'll get back to you as soon as possible."
@@ -285,7 +287,7 @@
       "on_sale": "Sale",
       "on_sale_from_html": "On Sale from {{ price }}",
       "from_text_html": "From {{ price }}",
-      "include_taxes": "Tax included.",
+      "include_taxes": "GST included.",
       "shipping_policy_html": "<a href=\"{{ link }}\">Shipping<\/a> calculated at checkout.",
       "quantity": "Quantity",
       "add_to_cart": "Add to Cart",
