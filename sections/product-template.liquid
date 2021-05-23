@@ -51,7 +51,7 @@
             <p class="product-single__vendor" itemprop="brand">{{ product.vendor }}</p>
           {% endif %}
           {{ product.description }}
-          <a href="https://magnum-nz.myshopify.com/pages/contact" class="btn btn-primary mt-2">Enquire</a>
+          <a href="#enquire" id="enquire-btn" class="btn btn-primary mt-2">Enquire</a>
           {% render "product-custom-button" %}
 
         {% comment %} if porduct not enquire only {% endcomment %}
@@ -152,6 +152,57 @@
   {% render "product-videos" %}
   
   {% render "product-custom-attributes" %}
+
+  {% if productTags contains 'Enquire Only' %}
+    <div class="row py-4" id="#enquire">
+      <div class="col-md-8 mx-auto contact-form form-vertical mb-md-0 mb-3">
+
+        <h4 class="mb-3">Enquire about {{ product.title }}</h4>
+
+        {% form 'contact' %}
+          {% if form.posted_successfully? %}
+            <p class="form--success">
+              {{ 'contact.form.post_success' | t }}
+            </p>
+          {% endif %}
+
+          {{ form.errors | default_errors }}
+
+          <div class="row">
+            <div class="col-12">
+              <label for="ContactFormName">{{ 'contact.form.name' | t }} *</label>
+              <input type="text" id="ContactFormName" name="contact[{{ 'contact.form.name' | t }}]" autocapitalize="words"
+                value="{% if form[name] %}{{ form[name] }}{% elsif customer %}{{ customer.name }}{% endif %}" required>
+            </div>
+
+            <div class="col-md-6">
+              <label for="ContactFormEmail">{{ 'contact.form.email' | t }} *</label>
+              <input type="email" id="ContactFormEmail" name="contact[email]" autocorrect="off" autocapitalize="off"
+                value="{% if form.email %}{{ form.email }}{% elsif customer %}{{ customer.email }}{% endif %}" required>
+            </div>
+
+            <div class="col-md-6">
+              <label for="ContactFormPhone">{{ 'contact.form.phone' | t }} *</label>
+              <input type="tel" id="ContactFormPhone" name="contact[{{ 'contact.form.phone' | t }}]" pattern="[0-9\-]*"
+                value="{% if form[phone] %}{{ form[phone] }}{% elsif customer %}{{ customer.phone }}{% endif %}" required>
+            </div>
+
+            <div class="col-12">
+              <label for="ContactFormMessage">{{ 'contact.form.message' | t }} *</label>
+              <textarea rows="3" id="ContactFormMessage" name="contact[{{ 'contact.form.message' | t }}]"
+                required>{% if form.body %}{{ form.body }}{% endif %}</textarea>
+            </div>
+
+            <div class="col-12">
+              <input type="hidden" id="ContactFormProductTitle" name="contact[ProductTitle]" value="{{ product.title }}">
+              <input type="hidden" id="ContactFormProductSku" name="contact[ProductSku]" value="{{ current_variant.sku }}">
+              <input type="submit" class="btn right" value="{{ 'contact.form.send' | t }}">
+            </div>
+          </div>
+        {% endform %}
+      </div>
+    </div>
+  {% endif %}
 </div>
 
 
