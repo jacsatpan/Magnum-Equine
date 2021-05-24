@@ -75,7 +75,15 @@
       {% endif %}
 
       <div class="container-fluid px-0">
-        {{ content_for_layout }}
+        {% if request.path == '/challenge' %}
+          <div class="container py-5">
+        {% endif %}
+
+          {{ content_for_layout }}
+
+        {% if request.path == '/challenge' %}
+          </div>
+        {% endif %}
       </div>
 
       {% section "footer" %}
