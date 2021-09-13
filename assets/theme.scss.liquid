@@ -3035,9 +3035,20 @@ select::-ms-expand {
     font-weight: 400;
   }
 
+  h1 {
+    line-height: normal;
+  }
+
+  @media(min-width: 767px) {
+    .feat-banner-text {
+      max-width: 60%;
+    }
+  }
+
   @media(max-width: 767px) {
     .feat-banner-text {
       background-color: rgba(255, 255, 253, 0.7);
+      max-width: 100%;
       width: 100%;
     }
   }
